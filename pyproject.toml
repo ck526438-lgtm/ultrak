@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ultrak"
+version = "1.0.0"
+description = "Upscale honnete de videos moyennes vers 4K/QHD, en local, mesuree sur TA machine"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "ck526438-lgtm" }]
+keywords = ["upscale", "4k", "ffmpeg", "video", "denoise", "cli", "tkinter"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Environment :: X11 Applications",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Video",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+ultrak = "ultrak.__main__:main"
+ultrak-gui = "ultrak.cli:gui_entry"
+
+[project.urls]
+Homepage = "https://github.com/ck526438-lgtm/ultrak"
+Issues = "https://github.com/ck526438-lgtm/ultrak/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

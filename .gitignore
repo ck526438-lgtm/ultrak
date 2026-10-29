@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+
+# Binaires trop lourds pour GitHub (limite 100 Mo) : UltraK les telecharge seul
+tools/*.exe
+tools/*.zip
+
+# Sorties de rendu et taches temporaires
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+*.gif
+!docs/assets/*.gif
+*.ultrak-part.mp4
+.ultrak-jobs.json
+
+# Apercus de test generes localement (les images du README sont dans docs/)
+/demo/
+/vibe_images/
+/bench/
+
+# Editeurs / OS
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
