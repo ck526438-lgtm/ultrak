@@ -7,12 +7,14 @@ from .hardware import Hardware
 from .utils import UltraKError, run
 
 FONTS = ("arial.ttf", "verdana.ttf", "tahoma.ttf", "segoeuib.ttf")
+POSIX_FONTS = ("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+               "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+               "/System/Library/Fonts/Supplemental/Arial.ttf")
 
 
 def _font() -> str:
     root = os.environ.get("SystemRoot", "C:/Windows").replace("\\", "/")
-    for name in FONTS:
-        path = f"{root}/Fonts/{name}"
+    for path in tuple(f"{root}/Fonts/{name}" for name in FONTS) + POSIX_FONTS:
         if os.path.isfile(path):
             # drawtext needs the value quoted AND the drive colon escaped.
             quoted = path.replace(":", "\\:")
@@ -21,11 +23,16 @@ def _font() -> str:
 
 
 def _label(text: str, size_div=16) -> str:
+    """A full `,drawtext=...` chain element, or "" when no font can be found.
+
+    The leading comma belongs here: an empty label must not leave one behind,
+    or ffmpeg sees a filter named "" and rejects the whole graph.
+    """
     font = _font()
     if not font:
         return ""
     # expansion=none keeps a literal % in labels like "100%".
-    return (f"drawtext=fontfile={font}:text='{text}':x=14:y=10:expansion=none:"
+    return (f",drawtext=fontfile={font}:text='{text}':x=14:y=10:expansion=none:"
             f"fontsize=h/{size_div}:fontcolor=white@0.95:shadowcolor=black@0.7:"
             f"shadowx=2:shadowy=2")
 
@@ -48,8 +55,8 @@ def pair(hw: Hardware, src: str, dist: str, dst: str, *, at=0.0, width=1280, lay
     _ffmpeg_ok(hw)
     half = int(width / 2 / 2) * 2
     h = int(half * 9 / 16 / 2) * 2
-    tag_a = f",{_label('AVANT  source')}" if labels else ""
-    tag_b = f",{_label('APRES  UltraK')}" if labels else ""
+    tag_a = _label('AVANT  source') if labels else ""
+    tag_b = _label('APRES  UltraK') if labels else ""
     # Same resampler on both sides: a fair comparison must not flatter either file.
     chain = (f"[0:v]scale={'-1' if layout == 'stack' else half}:{h if layout != 'stack' else -1}"
              f":flags=area{tag_a}[a];"
@@ -70,8 +77,8 @@ def zoom(hw: Hardware, src: str, dist: str, dst: str, *, at=0.0, panel=640,
     _ffmpeg_ok(hw)
     box = int(panel / 2 / 2) * 2
     box_h = int(box * 9 / 16 / 2) * 2
-    tag_a = f",{_label('AVANT  detail')}" if labels else ""
-    tag_b = f",{_label('APRES  detail')}" if labels else ""
+    tag_a = _label('AVANT  detail') if labels else ""
+    tag_b = _label('APRES  detail') if labels else ""
     def crop(stream):
         return (f"[{stream}:v]crop=iw*{frac}:ih*{frac}:(iw-iw*{frac})*{center[0]}:"
                 f"(ih-ih*{frac})*{center[1]}")
@@ -111,8 +118,8 @@ def gif(hw: Hardware, src: str, dist: str, dst: str, *, at=0.0, seconds=4.0, wid
     _ffmpeg_ok(hw)
     half = int(width / 2 / 2) * 2
     h = int(half * 9 / 16 / 2) * 2
-    tag_a = f",{_label('AVANT', 12)}" if labels else ""
-    tag_b = f",{_label('APRES', 12)}" if labels else ""
+    tag_a = _label('AVANT', 12) if labels else ""
+    tag_b = _label('APRES', 12) if labels else ""
     crop = (f"crop=iw*{frac}:ih*{frac}:(iw-iw*{frac})*{center[0]}:"
             f"(ih-ih*{frac})*{center[1]}")
     chain = (f"[0:v]{crop},fps={fps},scale={half}:{h}:flags=neighbor{tag_a}[a];"

@@ -26,6 +26,20 @@ def source(**changes) -> SourceInfo:
     return SourceInfo(**base)
 
 
+class TestEvidenceLabels:
+    def test_label_without_a_font_is_not_a_bare_comma(self, monkeypatch):
+        # Ubuntu runners have no C:/Windows/Fonts: an empty label used to leave a
+        # dangling "," in the graph and ffmpeg then rejected "No such filter: ''".
+        from ultrak import report
+        monkeypatch.setattr(report, "_font", lambda: "")
+        assert report._label("AVANT") == ""
+
+    def test_label_with_a_font_starts_with_a_comma(self, monkeypatch):
+        from ultrak import report
+        monkeypatch.setattr(report, "_font", lambda: "'font.ttf'")
+        assert report._label("AVANT").startswith(",drawtext=fontfile=")
+
+
 class TestSourceMetrics:
     def test_bpp_is_bits_per_pixel_per_frame(self):
         assert round(source().bpp, 3) == 0.050
