@@ -235,7 +235,7 @@ def build_parser():
     p = sub.add_parser("doctor", help="etat de la machine et des capacites ffmpeg")
     p.set_defaults(func=cmd_doctor)
 
-    p = sub.add_parser("install-ffmpeg", help="telecharger ffmpeg (~100 Mo, une fois)")
+    p = sub.add_parser("install-ffmpeg", help="telecharger ffmpeg (~190 Mo, une fois)")
     p.add_argument("--force", action="store_true")
     p.set_defaults(func=cmd_install)
 

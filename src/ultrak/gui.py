@@ -67,7 +67,7 @@ class App:
         try:
             self.hw = detect()
         except UltraKError:
-            self.emit("ffmpeg introuvable -> installation (~100 Mo, une seule fois)")
+            self.emit("ffmpeg introuvable -> installation (~190 Mo, une seule fois)")
             try:
                 self.hw = detect(install(log=self.emit))
             except UltraKError as exc:
