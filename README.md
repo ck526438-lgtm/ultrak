@@ -111,7 +111,7 @@ la RAM libre le permet — sinon il coûte 2,4× le temps pour un gain invisible
 
 ### Windows, un clic
 
-1. Télécharge et décompresse [la dernière release](https://github.com/ck526438-lgtm/ultrak/releases).
+1. Télécharge [ultrak-source.zip](https://github.com/ck526438-lgtm/ultrak/releases/latest/download/ultrak-source.zip) et décompresse-le où tu veux (une double-clique sur le zip suffit, puis « Extraire tout »).
 2. Double-clique **`Launch.bat`**.
 
 Le lanceur cherche Python (3.8+), ouvre la fenêtre, et télécharge ffmpeg (~100 Mo, une

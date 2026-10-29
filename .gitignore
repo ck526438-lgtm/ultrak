@@ -11,6 +11,7 @@ dist/
 # Binaires trop lourds pour GitHub (limite 100 Mo) : UltraK les telecharge seul
 tools/*.exe
 tools/*.zip
+ultrak-source.zip
 
 # Sorties de rendu et taches temporaires
 *.mp4
